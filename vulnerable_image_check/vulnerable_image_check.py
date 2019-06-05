@@ -1,5 +1,6 @@
 import os
 import cloudpassage
+import re
 
 
 class VulnerableImageCheck(object):
@@ -9,10 +10,12 @@ class VulnerableImageCheck(object):
     """
     def __init__(self, config):
         self.config = config
+        self.integration = self.get_integration_string()
 
         # authenticate to get a session object
         self.session = cloudpassage.HaloSession(self.config.halo_key,
-                                                self.config.halo_secret)
+                                                self.config.halo_secret,
+                                                integration_string=self.integration)
 
     def vulnerable_image_check(self):
         """We use this class to scan images for vulnerabilities."""
@@ -80,3 +83,17 @@ class VulnerableImageCheck(object):
 
         # return the endpoint
         return image_issues_endpoint
+
+    def get_integration_string(self):
+        """Return integration string for this tool."""
+        return "vulnerable_image_check/%s" % self.get_tool_version()
+
+    def get_tool_version(self):
+        """Get version of this tool from the __init__.py file."""
+        here_path = os.path.abspath(os.path.dirname(__file__))
+        init_file = os.path.join(here_path, "__init__.py")
+        ver = 0
+        with open(init_file, 'r') as i_f:
+            rx_compiled = re.compile(r"\s*__version__\s*=\s*\"(\S+)\"")
+            ver = rx_compiled.search(i_f.read()).group(1)
+        return ver
