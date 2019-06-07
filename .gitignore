@@ -1,6 +1,7 @@
 *.old
 *.local
 *.pyc
+*.idea
 .cache
 tests/public
 .coverage
