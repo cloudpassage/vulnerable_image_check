@@ -95,3 +95,7 @@ application stand-alone.  There are several
     <t>3) test_vulnerable_image_check.py - test application code  
 
 
+<!---
+#CPTAGS:community-supported automation
+#TBICON:images/python_icon.png
+-->
